@@ -1,4 +1,5 @@
-﻿using SLMPGenerator.Mitsubishi;
+﻿using SLMPGenerator.Common;
+using SLMPGenerator.Register.Mitsubishi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SLMPGenerator.InternalMemory
+namespace SLMPGenerator.Command.InternalMemory
 {
     internal class ReadCommand
     {
@@ -23,22 +24,23 @@ namespace SLMPGenerator.InternalMemory
         /// <param name="dataRegister"></param>
         /// <param name="deviceQty">読み出し点数</param>
         /// <exception cref="ArgumentException"></exception>
-        internal ReadCommand(BitLengthType bitLengthType, DataRegister dataRegister,ushort deviceQty)
+        internal ReadCommand(BitLengthType bitLengthType, DataRegister dataRegister, ushort deviceQty)
         {
 
             byte[] address;
             byte[] devCode;
 
-            switch(bitLengthType)
+            switch (bitLengthType)
             {
                 case BitLengthType.Address16bit:
+                //case BitLengthType.Address32bit://データレジスタは16bitと兼用する
                     _subCommand = new byte[] { 0x00, 0x00 };
-                    address = ToSwap3ByteBinary(dataRegister.GetAddress());
+                    address = BitHelper.ConvertToLittleEndian((int)dataRegister.GetAddress()).Take(3).ToArray();//先頭3byte取得
                     devCode = dataRegister.GetBinaryCode16bit();
                     break;
                 case BitLengthType.Address32bit:
                     _subCommand = new byte[] { 0x02, 0x00 };
-                    address = ToSwap4ByteBinary(dataRegister.GetAddress());
+                    address = BitHelper.ConvertToLittleEndian((int)dataRegister.GetAddress());
                     devCode = dataRegister.GetBinaryCode32bit();
                     break;
                 default:
@@ -51,49 +53,11 @@ namespace SLMPGenerator.InternalMemory
                 .Concat(_subCommand)
                 .Concat(address)
                 .Concat(devCode)
-                .Concat(To2byteBinary(deviceQty))
+                .Concat(BitHelper.ConvertToLittleEndian(deviceQty))
                 .ToArray();
         }
-        private byte[] To2byteBinary(ushort value)
-        {
-            byte[] bytes = BitConverter.GetBytes(value);
-
-            if (bytes.Length == 1)
-            {
-                return new byte[] { 0x00, bytes[0]};
-            }
-
-            return BitConverter.GetBytes(value);
-        }
 
 
-        private byte[] ToSwap3ByteBinary(ushort address)
-        {
-            byte[] bytes = BitConverter.GetBytes(address);
 
-            if (bytes.Length == 2)
-            {
-                return new byte[] { bytes[0], bytes[1], 0x00 };
-            }
-
-            return bytes;
-        }
-
-        private byte[] ToSwap4ByteBinary(ushort address)
-        {
-            byte[] bytes = BitConverter.GetBytes(address);
-
-            if (bytes.Length == 2)
-            {
-                return new byte[] { bytes[0], bytes[1], 0x00, 0x00 };
-            }
-
-            if (bytes.Length == 3)
-            {
-                return new byte[] { bytes[0], bytes[1], bytes[2], 0x00 };
-            }
-
-            return bytes;
-        }
     }
 }

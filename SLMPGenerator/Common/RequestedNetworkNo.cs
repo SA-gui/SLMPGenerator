@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SLMPGenerator
+namespace SLMPGenerator.Common
 {
     internal class RequestedNetworkNo
     {
@@ -18,8 +18,8 @@ namespace SLMPGenerator
         {
             Validate(networkNo);
             _networkNo = networkNo;
-            // Windows内部ではマルチバイトデータをリトルエンディアンで扱うのでShort型(2Byte)やInteger型(4Byte)の値をそのままコピーすれば都合よく送受信データと合致する
-            BinaryCode = new byte[] { BitConverter.GetBytes(networkNo)[0] };
+            
+            BinaryCode = new byte[] { BitHelper.ConvertToLittleEndian(networkNo)[0] };
         }
 
 
@@ -45,7 +45,7 @@ namespace SLMPGenerator
             return HashCode.Combine(_networkNo);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is RequestedNetworkNo No &&
                    _networkNo == No._networkNo;

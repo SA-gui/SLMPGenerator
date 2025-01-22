@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SLMPGenerator
+namespace SLMPGenerator.Common
 {
     internal class RequestedStationNo
     {
@@ -49,20 +49,13 @@ namespace SLMPGenerator
             return new byte[] { (byte)(highByte >> 4), (byte)(highByte & 0x0F), (byte)(lowByte >> 4), (byte)(lowByte & 0x0F) };
         }
 
-        private byte[] ToSwapBinary()
-        {
-            byte[] bytes = BitConverter.GetBytes(_stationNo);
-            // Windows内部ではマルチバイトデータをリトルエンディアンで扱うのでShort型(2Byte)やInteger型(4Byte)の値をそのままコピーすれば都合よく送受信データと合致する
-            // 下位バイト　上位バイトの順にする
-            return new byte[] { bytes[0], bytes[1] };
-        }
 
         public override int GetHashCode()
         {
             return HashCode.Combine(_stationNo);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is RequestedStationNo No &&
                    _stationNo == No._stationNo;

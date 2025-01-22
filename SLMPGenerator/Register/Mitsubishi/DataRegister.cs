@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SLMPGenerator.Mitsubishi
+namespace SLMPGenerator.Register.Mitsubishi
 {
-    internal class DataRegister:IRegister
+    internal class DataRegister : IRegister
     {
         private byte[] _binaryCode16bit;
         private byte[] _binaryCode32bit;
@@ -15,7 +15,7 @@ namespace SLMPGenerator.Mitsubishi
         {
             _address = address;
             _binaryCode16bit = new byte[] { 0xA8 };
-            _binaryCode32bit = new byte[] { 0x00,0xA8 };
+            _binaryCode32bit = new byte[] { 0xA8,0x00 };
         }
 
         public override bool Equals(object obj)

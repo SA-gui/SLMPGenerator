@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SLMPGenerator
+namespace SLMPGenerator.Common
 {
 
 
-    public enum RequestedIOType
+    public enum RequestedIOType : ushort
     {
         LocalStation = 1023,
         ManagementCPU = 1023,

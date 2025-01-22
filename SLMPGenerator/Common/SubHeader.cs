@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SLMPGenerator
+namespace SLMPGenerator.Common
 {
     internal class SubHeader
     {
@@ -20,7 +20,7 @@ namespace SLMPGenerator
             return BinaryCode != null ? BitConverter.ToInt32(BinaryCode, 0) : 0;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is SubHeader other && BinaryCode.SequenceEqual(other.BinaryCode);
         }

@@ -1,4 +1,4 @@
-﻿namespace SLMPGenerator
+﻿namespace SLMPGenerator.Common
 {
     //https://qiita.com/inari1047/items/4908926ba581c9297a3b
     internal class WatchdogTimer
@@ -20,20 +20,20 @@
         internal byte[] BinaryCode { get; private set; }
 
 
-        internal WatchdogTimer(RequestedIOType reqIOType,double timerValue)
+        internal WatchdogTimer(RequestedIOType reqIOType, double timerValue)
         {
             ValidatereqIOType(reqIOType);
             _reqIOType = reqIOType;
             ValidateTimerValue(timerValue);
             ValidateTimerRange(timerValue, reqIOType);
             _timerValue = timerValue;
-            BinaryCode = ToSwapBinary();
+            BinaryCode = BitHelper.ConvertToBigEndian((ushort)(_timerValue / TIMER_UNIT_VALUE));
         }
 
 
         private void ValidatereqIOType(RequestedIOType reqIOType)
         {
-            if(!Enum.IsDefined(typeof(RequestedIOType), reqIOType))
+            if (!Enum.IsDefined(typeof(RequestedIOType), reqIOType))
             {
                 throw new ArgumentException("Invalid RequestedIO Type", nameof(reqIOType));
             }
@@ -54,7 +54,7 @@
             double minValue, maxValue;
 
             //自局と他局でタイマの範囲が異なる
-            switch(reqIOType)
+            switch (reqIOType)
             {
                 case RequestedIOType.LocalStation://RequestedIOType.ManagementCPUも値が同じなので含まれる
                     minValue = LOCAL_ST_MIN_TIMER_VALUE;
@@ -88,12 +88,7 @@
             return new byte[] { (byte)(highByte >> 4), (byte)(highByte & 0x0F), (byte)(lowByte >> 4), (byte)(lowByte & 0x0F) };
         }
 
-        private byte[] ToSwapBinary()
-        {
-            byte[] bytes = BitConverter.GetBytes((ushort)(_timerValue / TIMER_UNIT_VALUE));
-            // 下位バイト　上位バイトの順にする
-            return new byte[] { bytes[1], bytes[0] };
-        }
+
 
 
         public override int GetHashCode()
@@ -101,7 +96,7 @@
             return HashCode.Combine(_timerValue, _reqIOType);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is WatchdogTimer timer &&
                _timerValue == timer._timerValue &&
@@ -115,7 +110,7 @@
 
         public static bool operator !=(WatchdogTimer left, WatchdogTimer right)
         {
-            return !(left.Equals(right));
+            return !left.Equals(right);
         }
 
     }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SLMPGenerator.Mitsubishi
+namespace SLMPGenerator.Register.Mitsubishi
 {
     internal interface IRegister
     {

@@ -1,5 +1,6 @@
-﻿using SLMPGenerator.InternalMemory;
-using SLMPGenerator.Mitsubishi;
+﻿using SLMPGenerator.Command.InternalMemory;
+using SLMPGenerator.Common;
+using SLMPGenerator.Register.Mitsubishi;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,7 +23,7 @@ namespace SLMPGenerator.UseCase
             CommandType commandType,
             DeviceType deviceType,
             ushort targetDeviceAddress,
-            ushort deviceQty)
+            ushort targetDeviceQty)
         {
             ValidateRequestStationNo(reqNetWorkNo, reqStationNo);
 
@@ -56,7 +57,7 @@ namespace SLMPGenerator.UseCase
             switch (commandType)
             {
                 case CommandType.Read:
-                    reqData = new ReadCommand(bitLengthType, (DataRegister)register, deviceQty).BinaryCode;
+                    reqData = new ReadCommand(bitLengthType, (DataRegister)register, targetDeviceQty).BinaryCode;
                     break;
                 case CommandType.Write:
                     throw new NotImplementedException();
@@ -65,16 +66,16 @@ namespace SLMPGenerator.UseCase
             }
 
             WatchdogTimer watchdogTimer = new WatchdogTimer(reqIOType, timermilisec / 1000);
-            //dataLength[1]はリザーブにより常に0　リザーブもデータ長に含めるので＋１している
-            byte[] dataLength = BitConverter.GetBytes((ushort)(watchdogTimer.BinaryCode.Length + reqData.Length+1));
+
+            byte[] dataLength = BitHelper.ConvertToLittleEndian((ushort)(watchdogTimer.BinaryCode.Length + reqData.Length ));
 
 
             byte[] bytes = new byte[] { }
                 .Concat(new SubHeader().BinaryCode)//subheader
                 .Concat(new RequestedNetworkNo(reqNetWorkNo).BinaryCode)//networkNo
                 .Concat(new RequestedStationNo(reqStationNo).BinaryCode)//stationNo
-                .Concat(BitConverter.GetBytes((ushort)reqIOType))//IOType
-                .Concat(new byte[] { BitConverter.GetBytes(multiDropStationNo)[0] })//multiDropStationNo
+                .Concat(BitHelper.ConvertToLittleEndian((ushort)reqIOType))//IOType
+                .Concat(new byte[] { BitHelper.ConvertToLittleEndian(multiDropStationNo)[0] })//multiDropStationNo
                 .Concat(new byte[] { dataLength[0]})//データ長
                 .Concat(new byte[] { dataLength[1]})//リザーブ リファレンスマニュアルの表記はややこしいので注意
                 .Concat(watchdogTimer.BinaryCode)
