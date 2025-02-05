@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace SLMPGenerator.UseCase
 {
-    public enum CommandType
+    public enum DeviceType
     {
-        Device_Read,
-        Device_Write
+        SpecialRealy,
+        SpecialRegister,
+        InputRelay,
+        OutputRelay,
+        DataRegister,
+
     }
 }

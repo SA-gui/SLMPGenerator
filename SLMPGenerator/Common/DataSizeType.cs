@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace SLMPGenerator.Common
 {
-    public enum DeviceType
+    internal enum DataSizeType
     {
-        SpecialRealy,
-        SpecialRegister,
-        InputRelay,
-        OutputRelay,
-        DataRegister,
-
+        OneByte,//Qseries 8bit
+        TwoBytes//Rseries 16bit
     }
 }

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SLMPGenerator.Common
+namespace SLMPGenerator.UseCase
 {
-    internal enum BitLengthType
+    public enum MessageType
     {
-        Address16bit,
-        Address32bit
+        Binary,
+        ASCII
     }
 }

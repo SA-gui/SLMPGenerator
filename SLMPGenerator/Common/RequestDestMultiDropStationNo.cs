@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace SLMPGenerator.Common
 {
-    internal class SubHeader
+    internal class RequestDestMultiDropStationNo
     {
-        private byte[] _subHeader = new byte[] { 0x00, 0x50 };
         internal byte[] BinaryCode { get; private set; }
         internal string ASCIICode { get; private set; }
-        internal SubHeader()
+
+        internal RequestDestMultiDropStationNo(ushort multiDropStationNo)
         {
-            BinaryCode = _subHeader.Reverse().ToArray();
+            BinaryCode = new byte[] { BitHelper.ConvertToBytesLittleEndian(multiDropStationNo)[0] };
             ASCIICode = BitConverter.ToString(BinaryCode).Replace("-", "");
         }
 
@@ -24,17 +24,18 @@ namespace SLMPGenerator.Common
 
         public override bool Equals(object? obj)
         {
-            return obj is SubHeader other && BinaryCode.SequenceEqual(other.BinaryCode);
+            return obj is RequestDestMultiDropStationNo other && BinaryCode.SequenceEqual(other.BinaryCode);
         }
 
-        public static bool operator ==(SubHeader left, SubHeader right)
+        public static bool operator ==(RequestDestMultiDropStationNo left, RequestDestMultiDropStationNo right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(SubHeader left, SubHeader right)
+        public static bool operator !=(RequestDestMultiDropStationNo left, RequestDestMultiDropStationNo right)
         {
             return !(left == right);
         }
+
     }
 }

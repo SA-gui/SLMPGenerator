@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SLMPGenerator.Common
+namespace SLMPGenerator.Response
 {
-    internal enum MemoryType
+    internal class STResponse
     {
-        Bit,
-        Word
     }
 }

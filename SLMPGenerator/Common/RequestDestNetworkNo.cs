@@ -6,20 +6,22 @@ using System.Threading.Tasks;
 
 namespace SLMPGenerator.Common
 {
-    internal class RequestedNetworkNo
+    internal class RequestDestNetworkNo
     {
         private const ushort MIN_VALUE = 0;
         private const ushort MAX_VALUE = 239;
         private ushort _networkNo;
 
         internal byte[] BinaryCode { get; private set; }
+        internal string ASCIICode { get; private set; }
 
-        internal RequestedNetworkNo(ushort networkNo)
+        internal RequestDestNetworkNo(ushort networkNo)
         {
             Validate(networkNo);
             _networkNo = networkNo;
             
-            BinaryCode = new byte[] { BitHelper.ConvertToLittleEndian(networkNo)[0] };
+            BinaryCode = BitHelper.ConvertToBytesLittleEndian(networkNo).Take(1).ToArray();
+            ASCIICode = BitConverter.ToString(BinaryCode).Replace("-", "");
         }
 
 
@@ -47,16 +49,16 @@ namespace SLMPGenerator.Common
 
         public override bool Equals(object? obj)
         {
-            return obj is RequestedNetworkNo No &&
+            return obj is RequestDestNetworkNo No &&
                    _networkNo == No._networkNo;
         }
 
-        public static bool operator ==(RequestedNetworkNo left, RequestedNetworkNo right)
+        public static bool operator ==(RequestDestNetworkNo left, RequestDestNetworkNo right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(RequestedNetworkNo left, RequestedNetworkNo right)
+        public static bool operator !=(RequestDestNetworkNo left, RequestDestNetworkNo right)
         {
             return !(left == right);
         }

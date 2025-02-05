@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SLMPGenerator.Common
 {
-    internal class RequestedStationNo
+    internal class RequestDestStationNo
     {
         private const ushort MIN_VALUE = 1;
         private const ushort MAX_VALUE = 120;
@@ -16,12 +16,14 @@ namespace SLMPGenerator.Common
         private ushort _stationNo;
 
         internal byte[] BinaryCode { get; private set; }
+        internal string ASCIICode { get; private set; }
 
-        internal RequestedStationNo(ushort stationNo)
+        internal RequestDestStationNo(ushort stationNo)
         {
             Validate(stationNo);
             _stationNo = stationNo;
-            BinaryCode = new byte[] { BitConverter.GetBytes(stationNo)[0] };
+            BinaryCode = BitConverter.GetBytes(stationNo).Take(1).ToArray();
+            ASCIICode = BitConverter.ToString(BinaryCode).Replace("-", "");
         }
 
 
@@ -34,21 +36,6 @@ namespace SLMPGenerator.Common
             }
 
         }
-        private string ToAscii()
-        {
-            byte[] bytes = BitConverter.GetBytes(_stationNo);
-            return bytes[1].ToString("X2") + bytes[0].ToString("X2");
-        }
-
-        private byte[] ToAsciiBinary()
-        {
-            byte[] bytes = BitConverter.GetBytes(_stationNo);
-            // 上位バイト　下位バイトの順にする
-            byte highByte = bytes[1];
-            byte lowByte = bytes[0];
-            return new byte[] { (byte)(highByte >> 4), (byte)(highByte & 0x0F), (byte)(lowByte >> 4), (byte)(lowByte & 0x0F) };
-        }
-
 
         public override int GetHashCode()
         {
@@ -57,16 +44,16 @@ namespace SLMPGenerator.Common
 
         public override bool Equals(object? obj)
         {
-            return obj is RequestedStationNo No &&
+            return obj is RequestDestStationNo No &&
                    _stationNo == No._stationNo;
         }
 
-        public static bool operator ==(RequestedStationNo left, RequestedStationNo right)
+        public static bool operator ==(RequestDestStationNo left, RequestDestStationNo right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(RequestedStationNo left, RequestedStationNo right)
+        public static bool operator !=(RequestDestStationNo left, RequestDestStationNo right)
         {
             return !(left == right);
         }
