@@ -61,8 +61,9 @@ namespace SLMPGenerator.Command
 
             ASCIICode = BitConverter.ToString(Command.Reverse().ToArray()).Replace("-", "")
                                 + BitConverter.ToString(SubCommand.Reverse().ToArray()).Replace("-", "")
-　　　　　　　　　　　　　　　　+ dataRegister.GetASCIIAddress(dataSize)
                                 + dataRegister.GetASCIICode(dataSize)
+                                + dataRegister.GetASCIIAddress(dataSize)
+                                
                                 + BitConverter.ToString(BitHelper.ConvertToBytesBigEndian(numberOfDevicePoints)).Replace("-", "");
         }
 

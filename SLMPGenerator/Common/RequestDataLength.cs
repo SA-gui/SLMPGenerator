@@ -14,9 +14,10 @@ namespace SLMPGenerator.Common
 
         internal RequestDataLength(MonitoringTimer monitoringTimer,IRequestData requestData)
         {
-            ushort dataLength = (ushort)(monitoringTimer.BinaryCode.Length + requestData.BinaryCode.Length);
-            BinaryCode = BitHelper.ConvertToBytesLittleEndian(dataLength);
-            ASCIICode = BitConverter.ToString(BitHelper.ConvertToBytesBigEndian(dataLength)).Replace("-", "");
+            ushort binarydataLength = (ushort)(monitoringTimer.BinaryCode.Length + requestData.BinaryCode.Length);
+            BinaryCode = BitHelper.ConvertToBytesLittleEndian(binarydataLength);
+            ushort asciiDataLength = (ushort)(monitoringTimer.ASCIICode.Length + requestData.ASCIICode.Length);
+            ASCIICode = BitConverter.ToString(BitHelper.ConvertToBytesLittleEndian(asciiDataLength).Reverse().ToArray()).Replace("-", "");
         }
 
         public override int GetHashCode()

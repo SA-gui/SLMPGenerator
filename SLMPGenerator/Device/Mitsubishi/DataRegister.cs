@@ -11,6 +11,8 @@ namespace SLMPGenerator.Device.Mitsubishi
     {
         private byte[] _binaryCodeOnebyte = new byte[] { 0xA8 };
         private byte[] _binaryCodeTwobytes = new byte[] { 0x00, 0xA8 };
+        private const string _ASCIICodeOnebyte = "D*";
+        private const string _ASCIICodeTwobytes = "D***";
 
 
         public ushort Address { get; private set; }
@@ -40,9 +42,9 @@ namespace SLMPGenerator.Device.Mitsubishi
             switch (dataSize)
             {
                 case DataSizeType.OneByte:
-                    return BitConverter.ToString(_binaryCodeOnebyte).Replace("-", "");
+                    return _ASCIICodeOnebyte;
                 case DataSizeType.TwoBytes:
-                    return BitConverter.ToString(_binaryCodeTwobytes).Replace("-", "");
+                    return _ASCIICodeTwobytes;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(dataSize), dataSize, null);
             }
