@@ -14,27 +14,17 @@ namespace SLMPGenerator.Common
         internal SubHeader()
         {
             BinaryCode = _subHeader.Reverse().ToArray();
-            ASCIICode = BitConverter.ToString(BinaryCode).Replace("-", "");
+            ASCIICode = BitHelper.ToString(BinaryCode);
         }
 
         public override int GetHashCode()
         {
-            return BinaryCode != null ? BitConverter.ToInt32(BinaryCode, 0) : 0;
+            return ASCIICode.GetHashCode();
         }
 
         public override bool Equals(object? obj)
         {
-            return obj is SubHeader other && BinaryCode.SequenceEqual(other.BinaryCode);
-        }
-
-        public static bool operator ==(SubHeader left, SubHeader right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(SubHeader left, SubHeader right)
-        {
-            return !(left == right);
+            return obj is SubHeader other && ASCIICode.Equals(other.ASCIICode);
         }
     }
 }

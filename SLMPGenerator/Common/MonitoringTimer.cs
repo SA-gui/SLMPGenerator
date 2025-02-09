@@ -15,23 +15,18 @@ namespace SLMPGenerator.Common
         const double OTHER_ST_MIN_TIMER_VALUE = 0.5;
         const double OTHER_ST_MAX_TIMER_VALUE = 60.0;
 
-        private double _timerSec;
-        private RequestDestModuleIOType _reqIOType;
-
         internal byte[] BinaryCode { get; private set; }
         internal string ASCIICode { get; private set; }
 
 
-        internal MonitoringTimer(RequestDestModuleIOType requestIOType, double timerSec)
+        internal MonitoringTimer(RequestDestModuleIOType destinationIOType, double timerSec)
         {
-            ValidatereqIOType(requestIOType);
-            _reqIOType = requestIOType;
+            ValidatereqIOType(destinationIOType);
             ValidateTimerValue(timerSec);
-            ValidateTimerRange(timerSec, requestIOType);
-            _timerSec = timerSec;
-            ushort timerSetVal = (ushort)(_timerSec / TIMER_UNIT_VALUE);
-            BinaryCode = BitHelper.ConvertToBytesLittleEndian(timerSetVal);
-            ASCIICode = BitConverter.ToString(BitHelper.ConvertToBytesBigEndian(timerSetVal)).Replace("-", "");
+            ValidateTimerRange(timerSec, destinationIOType);
+            ushort timerSetVal = (ushort)(timerSec / TIMER_UNIT_VALUE);
+            BinaryCode = BitHelper.ToBytesLittleEndian(timerSetVal);
+            ASCIICode = BitHelper.ToReverseString(BinaryCode);
         }
 
 
@@ -77,33 +72,15 @@ namespace SLMPGenerator.Common
             }
         }
 
-        private string ToAscii()
-        {
-            byte[] bytes = BitConverter.GetBytes((ushort)(_timerSec / TIMER_UNIT_VALUE));
-            return bytes[1].ToString("X2") + bytes[0].ToString("X2");
-        }
-
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_timerSec, _reqIOType);
+            return ASCIICode.GetHashCode();
         }
 
         public override bool Equals(object? obj)
         {
-            return obj is MonitoringTimer timer &&
-               _timerSec == timer._timerSec &&
-               _reqIOType == timer._reqIOType;
-        }
-
-        public static bool operator ==(MonitoringTimer left, MonitoringTimer right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(MonitoringTimer left, MonitoringTimer right)
-        {
-            return !left.Equals(right);
+            return obj is MonitoringTimer other && ASCIICode.Equals(other.ASCIICode);
         }
 
     }

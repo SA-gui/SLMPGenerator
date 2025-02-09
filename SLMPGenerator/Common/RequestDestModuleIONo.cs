@@ -13,8 +13,8 @@ namespace SLMPGenerator.Common
         internal RequestDestModuleIONo(RequestDestModuleIOType requestedModuleIOType)
         {
             Validate((ushort)requestedModuleIOType);
-            BinaryCode = BitHelper.ConvertToBytesLittleEndian((ushort)requestedModuleIOType);
-            ASCIICode = BitConverter.ToString(BitHelper.ConvertToBytesBigEndian((ushort)requestedModuleIOType)).Replace("-", "");
+            BinaryCode = BitHelper.ToBytesLittleEndian((ushort)requestedModuleIOType);
+            ASCIICode = BitHelper.ToReverseString(BinaryCode);
         }
 
         private void Validate(ushort moduleIONo)
@@ -27,22 +27,12 @@ namespace SLMPGenerator.Common
 
         public override int GetHashCode()
         {
-            return BinaryCode != null ? BitConverter.ToInt32(BinaryCode, 0) : 0;
+            return ASCIICode.GetHashCode();
         }
 
         public override bool Equals(object? obj)
         {
-            return obj is RequestDestModuleIONo other && BinaryCode.SequenceEqual(other.BinaryCode);
-        }
-
-        public static bool operator ==(RequestDestModuleIONo left, RequestDestModuleIONo right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(RequestDestModuleIONo left, RequestDestModuleIONo right)
-        {
-            return !(left == right);
+            return obj is RequestDestModuleIONo other && ASCIICode.Equals(other.ASCIICode);
         }
     }
 }

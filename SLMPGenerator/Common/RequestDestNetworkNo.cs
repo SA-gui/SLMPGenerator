@@ -10,18 +10,14 @@ namespace SLMPGenerator.Common
     {
         private const ushort MIN_VALUE = 0;
         private const ushort MAX_VALUE = 239;
-        private ushort _networkNo;
-
         internal byte[] BinaryCode { get; private set; }
         internal string ASCIICode { get; private set; }
 
         internal RequestDestNetworkNo(ushort networkNo)
         {
             Validate(networkNo);
-            _networkNo = networkNo;
-            
-            BinaryCode = BitHelper.ConvertToBytesLittleEndian(networkNo).Take(1).ToArray();
-            ASCIICode = BitConverter.ToString(BinaryCode).Replace("-", "");
+            BinaryCode = BitHelper.ToBytesLittleEndian(networkNo).Take(1).ToArray();
+            ASCIICode = BitHelper.ToString(BinaryCode);
         }
 
 
@@ -34,38 +30,16 @@ namespace SLMPGenerator.Common
             }
 
         }
-        private string ToAscii()
-        {
-            byte[] bytes = BitConverter.GetBytes(_networkNo);
-            return bytes[1].ToString("X2") + bytes[0].ToString("X2");
-        }
-
-
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_networkNo);
+            return ASCIICode.GetHashCode();
         }
 
         public override bool Equals(object? obj)
         {
-            return obj is RequestDestNetworkNo No &&
-                   _networkNo == No._networkNo;
+            return obj is RequestDestNetworkNo other && ASCIICode.Equals(other.ASCIICode);
         }
-
-        public static bool operator ==(RequestDestNetworkNo left, RequestDestNetworkNo right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(RequestDestNetworkNo left, RequestDestNetworkNo right)
-        {
-            return !(left == right);
-        }
-
-
-
-
 
     }
 }

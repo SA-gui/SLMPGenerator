@@ -15,29 +15,19 @@ namespace SLMPGenerator.Common
         internal RequestDataLength(MonitoringTimer monitoringTimer,IRequestData requestData)
         {
             ushort binarydataLength = (ushort)(monitoringTimer.BinaryCode.Length + requestData.BinaryCode.Length);
-            BinaryCode = BitHelper.ConvertToBytesLittleEndian(binarydataLength);
+            BinaryCode = BitHelper.ToBytesLittleEndian(binarydataLength);
             ushort asciiDataLength = (ushort)(monitoringTimer.ASCIICode.Length + requestData.ASCIICode.Length);
-            ASCIICode = BitConverter.ToString(BitHelper.ConvertToBytesLittleEndian(asciiDataLength).Reverse().ToArray()).Replace("-", "");
+            ASCIICode = BitHelper.ToString(BitHelper.ToBytesBigEndian(asciiDataLength));
         }
 
         public override int GetHashCode()
         {
-            return BinaryCode != null ? BitConverter.ToInt32(BinaryCode, 0) : 0;
+            return ASCIICode.GetHashCode();
         }
         public override bool Equals(object? obj)
         {
-            return obj is RequestDataLength other && BinaryCode.SequenceEqual(other.BinaryCode);
+            return obj is RequestDataLength other && ASCIICode.Equals(other.ASCIICode);
         }
-
-        public static bool operator ==(RequestDataLength left, RequestDataLength right)
-        {
-            return left.Equals(right);
-        }
-        public static bool operator !=(RequestDataLength left, RequestDataLength right)
-        {
-            return !(left == right);
-        }
-
 
     }
 }

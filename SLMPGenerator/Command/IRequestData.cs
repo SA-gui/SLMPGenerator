@@ -8,10 +8,14 @@ namespace SLMPGenerator.Command
 {
     internal interface IRequestData
     {
-        byte[] Command { get; }
-        byte[] SubCommand { get; }
-        byte[] Data { get; }
-        byte[] BinaryCode { get; }
-        string ASCIICode { get; }
+
+        public byte[] BinaryCode { get; }
+        public string ASCIICode { get; }
+
+        public DeviceType DeviceType { get; }
+        public int Address { get; }
+        public ushort NumberOfDevicePoints { get; }
+
+
     }
 }

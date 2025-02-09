@@ -13,28 +13,18 @@ namespace SLMPGenerator.Common
 
         internal RequestDestMultiDropStationNo(ushort multiDropStationNo)
         {
-            BinaryCode = new byte[] { BitHelper.ConvertToBytesLittleEndian(multiDropStationNo)[0] };
-            ASCIICode = BitConverter.ToString(BinaryCode).Replace("-", "");
+            BinaryCode = new byte[] { BitHelper.ToBytesLittleEndian(multiDropStationNo)[0] };
+            ASCIICode = BitHelper.ToString(BinaryCode);
         }
 
         public override int GetHashCode()
         {
-            return BinaryCode != null ? BitConverter.ToInt32(BinaryCode, 0) : 0;
+            return ASCIICode.GetHashCode();
         }
 
         public override bool Equals(object? obj)
         {
-            return obj is RequestDestMultiDropStationNo other && BinaryCode.SequenceEqual(other.BinaryCode);
-        }
-
-        public static bool operator ==(RequestDestMultiDropStationNo left, RequestDestMultiDropStationNo right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(RequestDestMultiDropStationNo left, RequestDestMultiDropStationNo right)
-        {
-            return !(left == right);
+            return obj is RequestDestMultiDropStationNo other && ASCIICode.Equals(other.ASCIICode);
         }
 
     }

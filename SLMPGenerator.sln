@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SLMPGenerator", "SLMPGenera
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "Sample\Sample.csproj", "{7B7E691A-C940-4187-96E0-477E3BD87ACD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{DE2611E9-0046-4197-B433-06087169254D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{7B7E691A-C940-4187-96E0-477E3BD87ACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B7E691A-C940-4187-96E0-477E3BD87ACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B7E691A-C940-4187-96E0-477E3BD87ACD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE2611E9-0046-4197-B433-06087169254D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE2611E9-0046-4197-B433-06087169254D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE2611E9-0046-4197-B433-06087169254D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE2611E9-0046-4197-B433-06087169254D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

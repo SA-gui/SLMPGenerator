@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace SLMPGenerator.Response
 {
-    internal class STResponse
+    public class STResponse
     {
+
+
+
+
     }
 }

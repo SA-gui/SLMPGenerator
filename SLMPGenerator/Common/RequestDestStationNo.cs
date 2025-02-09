@@ -13,7 +13,6 @@ namespace SLMPGenerator.Common
         private const ushort VALUE1 = 125;
         private const ushort VALUE2 = 126;
         private const ushort VALUE3 = 255;
-        private ushort _stationNo;
 
         internal byte[] BinaryCode { get; private set; }
         internal string ASCIICode { get; private set; }
@@ -21,9 +20,8 @@ namespace SLMPGenerator.Common
         internal RequestDestStationNo(ushort stationNo)
         {
             Validate(stationNo);
-            _stationNo = stationNo;
             BinaryCode = BitConverter.GetBytes(stationNo).Take(1).ToArray();
-            ASCIICode = BitConverter.ToString(BinaryCode).Replace("-", "");
+            ASCIICode = BitHelper.ToString(BinaryCode);
         }
 
 
@@ -39,24 +37,14 @@ namespace SLMPGenerator.Common
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_stationNo);
+            return ASCIICode.GetHashCode();
         }
 
         public override bool Equals(object? obj)
         {
-            return obj is RequestDestStationNo No &&
-                   _stationNo == No._stationNo;
+            return obj is RequestDestStationNo other && ASCIICode.Equals(other.ASCIICode);
         }
 
-        public static bool operator ==(RequestDestStationNo left, RequestDestStationNo right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(RequestDestStationNo left, RequestDestStationNo right)
-        {
-            return !(left == right);
-        }
 
     }
 }
