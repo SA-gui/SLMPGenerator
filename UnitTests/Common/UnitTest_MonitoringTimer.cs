@@ -10,7 +10,7 @@ namespace SLMPGenerator.Tests.Common
         /// </summary>
         [Theory]
         [InlineData(RequestDestModuleIOType.OwnStationCPU, 1.0, new byte[] { 0x04, 0x00 }, "0004")]
-        [InlineData(RequestDestModuleIOType.OwnStationCPU, 0.2, new byte[] { 0x01, 0x00 }, "0001")]
+        [InlineData(RequestDestModuleIOType.OwnStationCPU, 0.25, new byte[] { 0x01, 0x00 }, "0001")]
         [InlineData(RequestDestModuleIOType.OwnStationCPU, 10.0, new byte[] { 0x28, 0x00 }, "0028")]
         [InlineData(RequestDestModuleIOType.MultidropConnectionCPU, 0.5, new byte[] { 0x02, 0x00 }, "0002")]
         [InlineData(RequestDestModuleIOType.MultidropConnectionCPU, 60.0, new byte[] { 0xF0, 0x00 }, "00F0")]

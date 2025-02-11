@@ -130,7 +130,7 @@ namespace SLMPGenerator.UseCase
 
         public override int GetHashCode()
         {
-            return MessageType.GetHashCode() ^ DevAccessType.GetHashCode();
+            return HashCode.Combine(MessageType.GetHashCode(), DevAccessType.GetHashCode());
         }
 
         public override bool Equals(object? obj)

@@ -10,8 +10,8 @@ namespace SLMPGenerator.Tests.Common
         /// 有効なパラメータでコンストラクタを呼び出した場合、BinaryCodeとASCIICodeが正しく設定されることをテストします。
         /// </summary>
         [Theory]
-        [InlineData(2, 4, new byte[] { 0x06, 0x00 }, "0006")]
-        [InlineData(4, 8, new byte[] { 0x0C, 0x00 }, "000C")]
+        [InlineData(2, 4, new byte[] { 0x06, 0x00 }, "0008")]
+        [InlineData(4, 8, new byte[] { 0x0a, 0x00 }, "000C")]
         public void Constructor_ValidParameters_SetsBinaryCodeAndASCIICode(int monitoringTimerLength, int requestDataLength, byte[] expectedBinaryCode, string expectedASCIICode)
         {
             // Arrange
@@ -114,11 +114,13 @@ namespace SLMPGenerator.Tests.Common
     // スタブクラス
     internal class MonitoringTimerStub : MonitoringTimer
     {
-        public MonitoringTimerStub(int sec) : base(RequestDestModuleIOType.OwnStationCPU, sec)
+        public MonitoringTimerStub(int length) : base(RequestDestModuleIOType.OwnStationCPU, 1.0)
         {
-
+            BinaryCode = new byte[length];
+            ASCIICode = new string('0', length);
         }
-
+        public byte[] BinaryCode { get; }
+        public string ASCIICode { get; }
 
     }
 
