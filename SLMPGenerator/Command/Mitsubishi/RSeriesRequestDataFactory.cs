@@ -1,4 +1,5 @@
 ﻿using SLMPGenerator.UseCase;
+using SLMPGenerator.Command.Read;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,7 @@ namespace SLMPGenerator.Command.Mitsubishi
                 DeviceCode deviceCode = _deviceCodes[device.ToString()];
                 AddressHelper.ValidateDevPoints(messageType, deviceCode.DeviceType, points);
 
-                return new RSeriesReadRequestData(deviceCode,new BitUnitAccessData(deviceCode, (ushort)address,points) );
+                return new RSeriesReadRequestData(deviceCode,new BitUnitReadData(deviceCode, (ushort)address,points) );
             }
             else
             {
@@ -57,7 +58,7 @@ namespace SLMPGenerator.Command.Mitsubishi
                 DeviceCode deviceCode = _deviceCodes[device.ToString()];
                 AddressHelper.ValidateDevPoints(messageType, deviceCode.DeviceType, points);
 
-                return new RSeriesReadRequestData(deviceCode, new WordUnitAccessData(deviceCode, (ushort)address, points));
+                return new RSeriesReadRequestData(deviceCode, new WordUnitReadData(deviceCode, (ushort)address, points));
             }
             else
             {

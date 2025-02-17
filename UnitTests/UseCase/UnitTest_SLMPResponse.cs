@@ -14,14 +14,14 @@ namespace SLMPGenerator.Tests.UseCase
         [Theory]
         [InlineData(MessageType.Binary, DeviceAccessType.Bit)]
         [InlineData(MessageType.ASCII, DeviceAccessType.Word)]
-        public void Constructor_ValidParameters_SetsProperties(MessageType messageType, DeviceAccessType devAccessType)
+        public void Constructor_ValidParameters_SetsProperties(MessageType messageType, DeviceAccessType devReadType)
         {
             // Arrange & Act
-            var slmpResponse = new SLMPResponse(messageType, devAccessType);
+            var slmpResponse = new SLMPResponse(messageType, devReadType);
 
             // Assert
             Assert.Equal(messageType, slmpResponse.MessageType);
-            Assert.Equal(devAccessType, slmpResponse.DevAccessType);
+            Assert.Equal(devReadType, slmpResponse.DeviceAccessType);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace SLMPGenerator.Tests.UseCase
 
             // Assert
             Assert.Equal(slmpMessage.MessageType, slmpResponse.MessageType);
-            Assert.Equal(slmpMessage.DevAccessType, slmpResponse.DevAccessType);
+            Assert.Equal(slmpMessage.DevAccessType, slmpResponse.DeviceAccessType);
         }
 
         /// <summary>

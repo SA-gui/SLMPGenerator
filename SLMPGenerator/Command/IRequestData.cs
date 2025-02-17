@@ -13,7 +13,7 @@ namespace SLMPGenerator.Command
         public string ASCIICode { get; }
 
         public DeviceType DeviceType { get; }
-        public int Address { get; }
+        public int StartAddress { get; }
         public ushort NumberOfDevicePoints { get; }
 
 

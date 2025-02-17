@@ -1,9 +1,10 @@
 ﻿using SLMPGenerator.Command;
+using SLMPGenerator.Command.Read;
 using Xunit;
 
-namespace SLMPGenerator.Tests.Command
+namespace UnitTests.Command.Read
 {
-    public class UnitTest_WordUnitAccessData
+    public class UnitTest_WordUnitReadData
     {
         /// <summary>
         /// コンストラクタに有効なパラメータを渡した場合、プロパティが正しく設定されることをテストします。
@@ -17,12 +18,12 @@ namespace SLMPGenerator.Tests.Command
             var deviceCode = new DeviceCode(new byte[] { 0x01 }, "01", DeviceType.Word, DeviceNoRange.Dec);
 
             // Act
-            var wordUnitAccessData = new WordUnitAccessData(deviceCode, address, numberOfPoints);
+            var WordUnitReadData = new WordUnitReadData(deviceCode, address, numberOfPoints);
 
             // Assert
-            Assert.Equal(deviceCode, wordUnitAccessData.DeviceCode);
-            Assert.Equal(address, wordUnitAccessData.Address);
-            Assert.Equal(numberOfPoints, wordUnitAccessData.NumberOfDevicePoints);
+            Assert.Equal(deviceCode, WordUnitReadData.DeviceCode);
+            Assert.Equal(address, WordUnitReadData.StartAddress);
+            Assert.Equal(numberOfPoints, WordUnitReadData.NumberOfDevicePoints);
         }
 
         /// <summary>
@@ -37,19 +38,19 @@ namespace SLMPGenerator.Tests.Command
             ushort numberOfPoints = 10;
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => new WordUnitAccessData(deviceCode, address, numberOfPoints));
+            Assert.Throws<ArgumentNullException>(() => new WordUnitReadData(deviceCode, address, numberOfPoints));
         }
 
         /// <summary>
-        /// 同じプロパティ値を持つWordUnitAccessDataオブジェクトが等しいと判断されることをテストします。
+        /// 同じプロパティ値を持つWordUnitReadDataオブジェクトが等しいと判断されることをテストします。
         /// </summary>
         [Fact]
         public void Equals_SameProperties_ReturnsTrue()
         {
             // Arrange
             var deviceCode = new DeviceCode(new byte[] { 0x01 }, "01", DeviceType.Word, DeviceNoRange.Dec);
-            var obj1 = new WordUnitAccessData(deviceCode, 0x1234, 10);
-            var obj2 = new WordUnitAccessData(deviceCode, 0x1234, 10);
+            var obj1 = new WordUnitReadData(deviceCode, 0x1234, 10);
+            var obj2 = new WordUnitReadData(deviceCode, 0x1234, 10);
 
             // Act
             bool result = obj1.Equals(obj2);
@@ -59,7 +60,7 @@ namespace SLMPGenerator.Tests.Command
         }
 
         /// <summary>
-        /// 異なるプロパティ値を持つWordUnitAccessDataオブジェクトが等しくないと判断されることをテストします。
+        /// 異なるプロパティ値を持つWordUnitReadDataオブジェクトが等しくないと判断されることをテストします。
         /// </summary>
         [Fact]
         public void Equals_DifferentProperties_ReturnsFalse()
@@ -67,8 +68,8 @@ namespace SLMPGenerator.Tests.Command
             // Arrange
             var deviceCode1 = new DeviceCode(new byte[] { 0x01 }, "01", DeviceType.Word, DeviceNoRange.Dec);
             var deviceCode2 = new DeviceCode(new byte[] { 0x02 }, "02", DeviceType.Word, DeviceNoRange.Dec);
-            var obj1 = new WordUnitAccessData(deviceCode1, 0x1234, 10);
-            var obj2 = new WordUnitAccessData(deviceCode2, 0x5678, 20);
+            var obj1 = new WordUnitReadData(deviceCode1, 0x1234, 10);
+            var obj2 = new WordUnitReadData(deviceCode2, 0x5678, 20);
 
             // Act
             bool result = obj1.Equals(obj2);
@@ -78,15 +79,15 @@ namespace SLMPGenerator.Tests.Command
         }
 
         /// <summary>
-        /// 同じプロパティ値を持つWordUnitAccessDataオブジェクトが同じハッシュコードを返すことをテストします。
+        /// 同じプロパティ値を持つWordUnitReadDataオブジェクトが同じハッシュコードを返すことをテストします。
         /// </summary>
         [Fact]
         public void GetHashCode_SameProperties_ReturnsSameHashCode()
         {
             // Arrange
             var deviceCode = new DeviceCode(new byte[] { 0x01 }, "01", DeviceType.Word, DeviceNoRange.Dec);
-            var obj1 = new WordUnitAccessData(deviceCode, 0x1234, 10);
-            var obj2 = new WordUnitAccessData(deviceCode, 0x1234, 10);
+            var obj1 = new WordUnitReadData(deviceCode, 0x1234, 10);
+            var obj2 = new WordUnitReadData(deviceCode, 0x1234, 10);
 
             // Act
             int hashCode1 = obj1.GetHashCode();
@@ -97,7 +98,7 @@ namespace SLMPGenerator.Tests.Command
         }
 
         /// <summary>
-        /// 異なるプロパティ値を持つWordUnitAccessDataオブジェクトが異なるハッシュコードを返すことをテストします。
+        /// 異なるプロパティ値を持つWordUnitReadDataオブジェクトが異なるハッシュコードを返すことをテストします。
         /// </summary>
         [Fact]
         public void GetHashCode_DifferentProperties_ReturnsDifferentHashCode()
@@ -105,8 +106,8 @@ namespace SLMPGenerator.Tests.Command
             // Arrange
             var deviceCode1 = new DeviceCode(new byte[] { 0x01 }, "01", DeviceType.Word, DeviceNoRange.Dec);
             var deviceCode2 = new DeviceCode(new byte[] { 0x02 }, "02", DeviceType.Word, DeviceNoRange.Dec);
-            var obj1 = new WordUnitAccessData(deviceCode1, 0x1234, 10);
-            var obj2 = new WordUnitAccessData(deviceCode2, 0x5678, 20);
+            var obj1 = new WordUnitReadData(deviceCode1, 0x1234, 10);
+            var obj2 = new WordUnitReadData(deviceCode2, 0x5678, 20);
 
             // Act
             int hashCode1 = obj1.GetHashCode();

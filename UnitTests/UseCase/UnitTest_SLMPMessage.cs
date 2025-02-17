@@ -14,15 +14,15 @@ namespace SLMPGenerator.Tests.UseCase
         [Theory]
         [InlineData(MessageType.Binary, PLCType.Mitsubishi_R_Series, DeviceAccessType.Bit, 0, 255, RequestDestModuleIOType.OwnStationCPU, 0, 1.0)]
         [InlineData(MessageType.ASCII, PLCType.Mitsubishi_Q_Series, DeviceAccessType.Word, 0, 255, RequestDestModuleIOType.ControlCPU, 1, 2.0)]
-        public void Constructor_ValidParameters_SetsProperties(MessageType messageType, PLCType plcType, DeviceAccessType devAccessType, ushort reqNetWorkNo, ushort reqStationNo, RequestDestModuleIOType reqIOType, ushort multiDropStationNo, double timerSec)
+        public void Constructor_ValidParameters_SetsProperties(MessageType messageType, PLCType plcType, DeviceAccessType devReadType, ushort reqNetWorkNo, ushort reqStationNo, RequestDestModuleIOType reqIOType, ushort multiDropStationNo, double timerSec)
         {
             // Arrange & Act
-            var slmpMessage = new SLMPMessage(messageType, plcType, devAccessType, reqNetWorkNo, reqStationNo, reqIOType, multiDropStationNo, timerSec);
+            var slmpMessage = new SLMPMessage(messageType, plcType, devReadType, reqNetWorkNo, reqStationNo, reqIOType, multiDropStationNo, timerSec);
 
             // Assert
             Assert.Equal(messageType, slmpMessage.MessageType);
             Assert.Equal(plcType, slmpMessage.PlcType);
-            Assert.Equal(devAccessType, slmpMessage.DevAccessType);
+            Assert.Equal(devReadType, slmpMessage.DevAccessType);
             Assert.Equal(reqNetWorkNo, slmpMessage.ReqNetWorkNo);
             Assert.Equal(reqStationNo, slmpMessage.ReqStationNo);
             Assert.Equal(reqIOType, slmpMessage.ReqIOType);
@@ -41,13 +41,13 @@ namespace SLMPGenerator.Tests.UseCase
             // Arrange
             MessageType messageType = MessageType.Binary;
             PLCType plcType = PLCType.Mitsubishi_R_Series;
-            DeviceAccessType devAccessType = DeviceAccessType.Bit;
+            DeviceAccessType devReadType = DeviceAccessType.Bit;
             RequestDestModuleIOType reqIOType = RequestDestModuleIOType.OwnStationCPU;
             ushort multiDropStationNo = 0;
             double timerSec = 1.0;
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => new SLMPMessage(messageType, plcType, devAccessType, reqNetWorkNo, reqStationNo, reqIOType, multiDropStationNo, timerSec));
+            Assert.Throws<ArgumentException>(() => new SLMPMessage(messageType, plcType, devReadType, reqNetWorkNo, reqStationNo, reqIOType, multiDropStationNo, timerSec));
         }
 
         /// <summary>
