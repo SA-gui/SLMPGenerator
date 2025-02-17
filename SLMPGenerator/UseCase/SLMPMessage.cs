@@ -77,6 +77,37 @@ namespace SLMPGenerator.UseCase
             }
         }
 
+        public byte[] CreateMessage(
+            string rawAddress,
+            List<short> writeData)
+        {
+
+            NumberOfDevicePoints = (ushort)writeData.Count;
+            IRequestData requestData;
+
+            switch (PlcType)
+            {
+                case PLCType.Mitsubishi_R_Series:
+                    requestData = RSeriesRequestDataFactory.CreateWriteRequestData(MessageType, rawAddress, writeData);
+                    break;
+                /*case PLCType.Mitsubishi_Q_Series:
+                    //requestData = QSeriesRequestDataFactory.CreateReadRequestData(DevAccessType, MessageType, rawAddress, numOfDevPoints);
+                    break;*/
+                default:
+                    throw new NotSupportedException("This PLC type is not supported.");
+            }
+
+            switch (MessageType)
+            {
+                case MessageType.Binary:
+                    return CreateBinaryMessage(requestData);
+                case MessageType.ASCII:
+                    string asciiCode = CreateASCIIMessage(requestData);
+                    return Encoding.ASCII.GetBytes(asciiCode);
+                default:
+                    throw new NotSupportedException("Please specify Ascii or Binary as the message type.");
+            }
+        }
         private byte[] CreateBinaryMessage(IRequestData requestData)
         {
             return new byte[] { }

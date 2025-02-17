@@ -95,6 +95,18 @@ namespace SLMPGenerator.UseCase
             {
                 throw new SLMPUnitErrorException($"ErrorCode:{resultCode} Consult your unit's manual for details.");
             }
+
+            int responseDataLengthStartIndex = 7;
+            int responseDataLengthLength = 2;
+            int responseDataSize = BitConverter.ToInt16(rawResponse.Skip(responseDataLengthStartIndex).Take(responseDataLengthLength).ToArray());
+
+            //応答データ長が２かつnormalResponseCodeが０の場合は処理を抜ける　データ長２＝終了コードのみで応答データなし
+            if (responseDataSize == 2)
+            {
+                return new List<short>();
+            }
+
+
             int responseDataStartIndex = 11;
             byte[] res;
             int responseDataLength;

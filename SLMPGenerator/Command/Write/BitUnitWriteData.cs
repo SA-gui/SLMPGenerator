@@ -29,12 +29,18 @@ namespace SLMPGenerator.Command.Write
 
         public override int GetHashCode()
         {
-            return DeviceCode.GetHashCode() ^ StartAddress.GetHashCode() ^ NumberOfDevicePoints.GetHashCode() ^ WriteDataList.GetHashCode();
+            int hashCode = DeviceCode.GetHashCode() ^ StartAddress.GetHashCode() ^ NumberOfDevicePoints.GetHashCode();
+            foreach (var data in WriteDataList)
+            {
+                hashCode = hashCode ^ data.GetHashCode();
+            }
+            return hashCode;
         }
 
         public override bool Equals(object? obj)
         {
-            return obj is BitUnitWriteData other && DeviceCode.Equals(other.DeviceCode) && StartAddress.Equals(other.StartAddress) && NumberOfDevicePoints.Equals(other.NumberOfDevicePoints) && WriteDataList.SequenceEqual(other.WriteDataList);
+            
+            return obj is BitUnitWriteData other && StartAddress.Equals(other.StartAddress) && DeviceCode.Equals(other.DeviceCode) && NumberOfDevicePoints.Equals(other.NumberOfDevicePoints) && WriteDataList.SequenceEqual(other.WriteDataList);
         }
     }
 }

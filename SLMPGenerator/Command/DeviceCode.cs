@@ -29,7 +29,7 @@ namespace SLMPGenerator.Command
 
         public override bool Equals(object? obj)
         {
-            return obj is DeviceCode other && ASCIICode.Equals(other.ASCIICode);
+            return obj is DeviceCode other && BinaryCode.SequenceEqual(other.BinaryCode) && ASCIICode.Equals(other.ASCIICode) && DeviceType.Equals(other.DeviceType) && DeviceNoRange.Equals(other.DeviceNoRange);
         }
     }
 }
