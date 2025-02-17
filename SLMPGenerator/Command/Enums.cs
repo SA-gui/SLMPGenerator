@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SLMPGenerator.Command
 {
-    internal enum DeviceType
+    public enum DeviceType
     {
         Bit,
         Word,
@@ -23,7 +23,7 @@ namespace SLMPGenerator.Command
         Word
     }
 
-    internal enum DeviceNoRange
+    public enum DeviceNoRange
     {
         Dec,
         Hex
