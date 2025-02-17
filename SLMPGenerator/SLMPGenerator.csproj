@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Command\Read\" />
-    <Folder Include="Command\Write\" />
   </ItemGroup>
 
 </Project>

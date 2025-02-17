@@ -4,25 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SLMPGenerator.Command
+namespace SLMPGenerator.Command.Write
 {
-    internal class WordUnitWriteData
+    internal class BitUnitWriteData
     {
         public ushort StartAddress { get; private set; }
         public DeviceCode DeviceCode { get; private set; }
         public ushort NumberOfDevicePoints { get; private set; }
-        public IReadOnlyList<ushort> WriteDataList { get; private set; }
+        public IReadOnlyList<bool> WriteDataList { get; private set; }
 
 
-        public WordUnitWriteData(DeviceCode deviceCode, ushort startAddress, ushort writeData)
+        public BitUnitWriteData(DeviceCode deviceCode, ushort startAddress, bool writeData)
+            : this(deviceCode, startAddress, new List<bool> { writeData })
         {
-            DeviceCode = deviceCode ?? throw new ArgumentNullException(nameof(deviceCode));
-            StartAddress = startAddress;
-            WriteDataList = new List<ushort> { writeData };
-            NumberOfDevicePoints = (ushort)WriteDataList.Count;
         }
 
-        public WordUnitWriteData(DeviceCode deviceCode, ushort startAddress,  IReadOnlyList<ushort> writeDataList)
+        public BitUnitWriteData(DeviceCode deviceCode, ushort startAddress, IReadOnlyList<bool> writeDataList)
         {
             DeviceCode = deviceCode ?? throw new ArgumentNullException(nameof(deviceCode));
             StartAddress = startAddress;
@@ -37,7 +34,7 @@ namespace SLMPGenerator.Command
 
         public override bool Equals(object? obj)
         {
-            return obj is WordUnitWriteData other && DeviceCode.Equals(other.DeviceCode) && StartAddress.Equals(other.StartAddress) && NumberOfDevicePoints.Equals(other.NumberOfDevicePoints) && WriteDataList.SequenceEqual(other.WriteDataList);
+            return obj is BitUnitWriteData other && DeviceCode.Equals(other.DeviceCode) && StartAddress.Equals(other.StartAddress) && NumberOfDevicePoints.Equals(other.NumberOfDevicePoints) && WriteDataList.SequenceEqual(other.WriteDataList);
         }
     }
 }
