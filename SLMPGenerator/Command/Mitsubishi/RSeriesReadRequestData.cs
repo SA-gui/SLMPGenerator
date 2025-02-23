@@ -15,7 +15,7 @@ namespace SLMPGenerator.Command.Mitsubishi
         private byte[] _command = new byte[] { 0x04, 0x01 };
         private byte[] _bitSubCommand = new byte[] { 0x00, 0x03 };
         private byte[] _wordSubCommand = new byte[] { 0x00, 0x02 };
-        private int _padding = 8;
+        private const int _padding = 8;
 
         public byte[] BinaryCode { get; private set; } = Array.Empty<byte>();
         public string ASCIICode { get; private set; } = string.Empty;
@@ -37,7 +37,7 @@ namespace SLMPGenerator.Command.Mitsubishi
             byte[] binaryAddress = ConvertToBinaryAddress(deviceCode.DeviceNoRange, StartAddress);
 
             SetBinaryCode(commnad, subCommand, binaryAddress, deviceCode.BinaryCode, binaryDevicePoints);
-            SetASCIICode(commnad, subCommand, binaryAddress, deviceCode.ASCIICode, binaryDevicePoints);
+            SetASCIICode(commnad, subCommand, wordUnitReadData.StartAddress, deviceCode.ASCIICode, binaryDevicePoints);
         }
 
         internal RSeriesReadRequestData(DeviceCode deviceCode, BitUnitReadData bitUnitReadData)
@@ -51,7 +51,7 @@ namespace SLMPGenerator.Command.Mitsubishi
             byte[] binaryAddress = ConvertToBinaryAddress(deviceCode.DeviceNoRange, StartAddress);
 
             SetBinaryCode(commnad, subCommand, binaryAddress, deviceCode.BinaryCode, binaryDevicePoints);
-            SetASCIICode(commnad, subCommand, binaryAddress, deviceCode.ASCIICode, binaryDevicePoints);
+            SetASCIICode(commnad, subCommand, bitUnitReadData.StartAddress, deviceCode.ASCIICode, binaryDevicePoints);
         }
 
         private void SetBinaryCode(byte[] command, byte[] subCommand, byte[] binaryAddress, byte[] devCode, byte[] binaryDevPoints)
@@ -65,11 +65,11 @@ namespace SLMPGenerator.Command.Mitsubishi
                 .ToArray();
         }
 
-        private void SetASCIICode(byte[] command, byte[] subCommand, byte[] binaryAddress, string devCode, byte[] binaryDevPoints)
+        private void SetASCIICode(byte[] command, byte[] subCommand, ushort startAdress, string devCode, byte[] binaryDevPoints)
         {
             string asciiCommand = BitHelper.ToReverseString(command);
             string asciiSubCommand = BitHelper.ToReverseString(subCommand);
-            string asciiAddress = BitHelper.ToReverseString(binaryAddress).PadLeft(_padding, '0');
+            string asciiAddress = startAdress.ToString().PadLeft(_padding, '0');
             string asciiDevicePoints = BitHelper.ToReverseString(binaryDevPoints);
 
             ASCIICode = asciiCommand
