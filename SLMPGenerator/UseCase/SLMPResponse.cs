@@ -12,32 +12,32 @@ namespace SLMPGenerator.UseCase
     public class SLMPResponse
     {
         public MessageType MessageType { get; private set; }
-        public DeviceAccessType DevAccessType { get; private set; }
+        public DeviceAccessType DeviceAccessType { get; private set; }
 
 
 
         public SLMPResponse(MessageType messageType, DeviceAccessType devAccessType)
         {
             MessageType = messageType;
-            DevAccessType = devAccessType;
+            DeviceAccessType = devAccessType;
         }
 
         public SLMPResponse(SLMPMessage message)
         {
             MessageType = message.MessageType;
-            DevAccessType = message.DevAccessType;
+            DeviceAccessType = message.DevAccessType;
         }
 
         public List<short> Resolve(byte[] response,ushort numberOfDevicePoints)
         {
-            ushort responseDataUnitLength = GetResponseDataUnitLength(MessageType, DevAccessType);
+            ushort responseDataUnitLength = GetResponseDataUnitLength(MessageType, DeviceAccessType);
 
             switch (MessageType)
             {
                 case MessageType.ASCII:
                     return ResolveASCIIResponse(response, numberOfDevicePoints, responseDataUnitLength);
                 case MessageType.Binary:
-                    return ResolveBinaryResponse(response, DevAccessType, numberOfDevicePoints, responseDataUnitLength);
+                    return ResolveBinaryResponse(response, DeviceAccessType, numberOfDevicePoints, responseDataUnitLength);
                 default:
                     throw new NotSupportedException("Please specify Ascii or Binary as the message type.");
             }
@@ -95,6 +95,18 @@ namespace SLMPGenerator.UseCase
             {
                 throw new SLMPUnitErrorException($"ErrorCode:{resultCode} Consult your unit's manual for details.");
             }
+
+            int responseDataLengthStartIndex = 7;
+            int responseDataLengthLength = 2;
+            int responseDataSize = BitConverter.ToInt16(rawResponse.Skip(responseDataLengthStartIndex).Take(responseDataLengthLength).ToArray());
+
+            //応答データ長が２かつnormalResponseCodeが０の場合は処理を抜ける　データ長２＝終了コードのみで応答データなし
+            if (responseDataSize == 2)
+            {
+                return new List<short>();
+            }
+
+
             int responseDataStartIndex = 11;
             byte[] res;
             int responseDataLength;
@@ -130,12 +142,12 @@ namespace SLMPGenerator.UseCase
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(MessageType.GetHashCode(), DevAccessType.GetHashCode());
+            return HashCode.Combine(MessageType.GetHashCode(), DeviceAccessType.GetHashCode());
         }
 
         public override bool Equals(object? obj)
         {
-            return obj is SLMPResponse other && MessageType.Equals(other.MessageType) && DevAccessType.Equals(other.DevAccessType);
+            return obj is SLMPResponse other && MessageType.Equals(other.MessageType) && DeviceAccessType.Equals(other.DeviceAccessType);
         }
 
 

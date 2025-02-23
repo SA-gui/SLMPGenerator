@@ -42,10 +42,10 @@ namespace SLMPGenerator.Tests.Command.Mitsubishi
         /// </summary>
         [Theory]
         [InlineData((DeviceAccessType)999, MessageType.Binary, "D100", 10)]
-        public void CreateReadRequestData_InvalidDeviceAccessType_ThrowsArgumentException(DeviceAccessType devAccessType, MessageType messageType, string rawAddress, ushort points)
+        public void CreateReadRequestData_InvalidDeviceAccessType_ThrowsArgumentException(DeviceAccessType devReadType, MessageType messageType, string rawAddress, ushort points)
         {
             // Arrange & Act & Assert
-            Assert.Throws<ArgumentException>(() => RSeriesRequestDataFactory.CreateReadRequestData(devAccessType, messageType, rawAddress, points));
+            Assert.Throws<ArgumentException>(() => RSeriesRequestDataFactory.CreateReadRequestData(devReadType, messageType, rawAddress, points));
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using SLMPGenerator.Common;
+﻿using SLMPGenerator.Command.Read;
+using SLMPGenerator.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,33 +20,33 @@ namespace SLMPGenerator.Command.Mitsubishi
 
         public DeviceType DeviceType { get; private set; }
 
-        public int Address { get; private set; }
+        public int StartAddress { get; private set; }
 
         public ushort NumberOfDevicePoints { get; private set; }
 
-        internal QSeriesReadRequestData(DeviceCode deviceCode, WordUnitAccessData wordAccess)
+        internal QSeriesReadRequestData(DeviceCode deviceCode, WordUnitReadData wordUnitReadData)
         {
             DeviceType = deviceCode.DeviceType;
-            Address = wordAccess.Address;
-            NumberOfDevicePoints = wordAccess.NumberOfDevicePoints;
+            StartAddress = wordUnitReadData.StartAddress;
+            NumberOfDevicePoints = wordUnitReadData.NumberOfDevicePoints;
             byte[] commnad = _command.Reverse().ToArray();
             byte[] subCommand = _wordSubCommand.Reverse().ToArray();
-            byte[] binaryDevicePoints = BitHelper.ToBytesLittleEndian(wordAccess.NumberOfDevicePoints);
-            byte[] binaryAddress = ConvertToBinaryAddress(deviceCode.DeviceNoRange, Address);
+            byte[] binaryDevicePoints = BitHelper.ToBytesLittleEndian(wordUnitReadData.NumberOfDevicePoints);
+            byte[] binaryAddress = ConvertToBinaryAddress(deviceCode.DeviceNoRange, StartAddress);
 
             SetBinaryCode(commnad, subCommand, binaryAddress, deviceCode.BinaryCode, binaryDevicePoints);
             SetASCIICode(commnad, subCommand, binaryAddress, deviceCode.ASCIICode, binaryDevicePoints);
         }
 
-        internal QSeriesReadRequestData(DeviceCode deviceCode, BitUnitAccessData bitAccess)
+        internal QSeriesReadRequestData(DeviceCode deviceCode, BitUnitReadData bitUnitReadData)
         {
             DeviceType = deviceCode.DeviceType;
-            Address = bitAccess.Address;
-            NumberOfDevicePoints = bitAccess.NumberOfDevicePoints;
+            StartAddress = bitUnitReadData.StartAddress;
+            NumberOfDevicePoints = bitUnitReadData.NumberOfDevicePoints;
             byte[] commnad = _command.Reverse().ToArray();
             byte[] subCommand = _bitSubCommand.Reverse().ToArray();
-            byte[] binaryDevicePoints = BitHelper.ToBytesLittleEndian(bitAccess.NumberOfDevicePoints);
-            byte[] binaryAddress = ConvertToBinaryAddress(deviceCode.DeviceNoRange, Address);
+            byte[] binaryDevicePoints = BitHelper.ToBytesLittleEndian(bitUnitReadData.NumberOfDevicePoints);
+            byte[] binaryAddress = ConvertToBinaryAddress(deviceCode.DeviceNoRange, StartAddress);
 
             SetBinaryCode(commnad, subCommand, binaryAddress, deviceCode.BinaryCode, binaryDevicePoints);
             SetASCIICode(commnad, subCommand, binaryAddress, deviceCode.ASCIICode, binaryDevicePoints);

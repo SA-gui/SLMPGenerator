@@ -1,18 +1,16 @@
-﻿using SLMPGenerator.Command.Read;
+﻿using SLMPGenerator.Command.Write;
 using SLMPGenerator.Common;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SLMPGenerator.Command.Mitsubishi
 {
-    internal class RSeriesReadRequestData : IRequestData
+    internal class RSeriesWriteRequestData : IRequestData
     {
-        private byte[] _command = new byte[] { 0x04, 0x01 };
+        private byte[] _command = new byte[] { 0x14, 0x01 };
         private byte[] _bitSubCommand = new byte[] { 0x00, 0x03 };
         private byte[] _wordSubCommand = new byte[] { 0x00, 0x02 };
         private int _padding = 8;
@@ -26,35 +24,50 @@ namespace SLMPGenerator.Command.Mitsubishi
 
         public ushort NumberOfDevicePoints { get; private set; }
 
-        internal RSeriesReadRequestData(DeviceCode deviceCode, WordUnitReadData wordUnitReadData)
+        internal RSeriesWriteRequestData(DeviceCode deviceCode, WordUnitWriteData wordUnitWriteData)
         {
             DeviceType = deviceCode.DeviceType;
-            StartAddress = wordUnitReadData.StartAddress;
-            NumberOfDevicePoints = wordUnitReadData.NumberOfDevicePoints;
+            StartAddress = wordUnitWriteData.StartAddress;
+            NumberOfDevicePoints = wordUnitWriteData.NumberOfDevicePoints;
             byte[] commnad = _command.Reverse().ToArray();
             byte[] subCommand = _wordSubCommand.Reverse().ToArray();
-            byte[] binaryDevicePoints = BitHelper.ToBytesLittleEndian(wordUnitReadData.NumberOfDevicePoints);
+            byte[] binaryDevicePoints = BitHelper.ToBytesLittleEndian(wordUnitWriteData.NumberOfDevicePoints);
             byte[] binaryAddress = ConvertToBinaryAddress(deviceCode.DeviceNoRange, StartAddress);
+            byte[] binaryWriteData=new byte[] { };
 
-            SetBinaryCode(commnad, subCommand, binaryAddress, deviceCode.BinaryCode, binaryDevicePoints);
-            SetASCIICode(commnad, subCommand, binaryAddress, deviceCode.ASCIICode, binaryDevicePoints);
+            foreach (short data in wordUnitWriteData.WriteDataList)
+            {
+                binaryWriteData = new byte[] { }
+                .Concat(binaryWriteData)
+                .Concat(BitHelper.ToBytesLittleEndian((ushort)data)).ToArray();
+            }
+
+            SetBinaryCode(commnad, subCommand, binaryAddress, deviceCode.BinaryCode, binaryDevicePoints, binaryWriteData);
+            SetASCIICode(commnad, subCommand, binaryAddress, deviceCode.ASCIICode, binaryDevicePoints, binaryWriteData);
         }
 
-        internal RSeriesReadRequestData(DeviceCode deviceCode, BitUnitReadData bitUnitReadData)
+        internal RSeriesWriteRequestData(DeviceCode deviceCode, BitUnitWriteData bitUnitWriteData)
         {
             DeviceType = deviceCode.DeviceType;
-            StartAddress = bitUnitReadData.StartAddress;
-            NumberOfDevicePoints = bitUnitReadData.NumberOfDevicePoints;
+            StartAddress = bitUnitWriteData.StartAddress;
+            NumberOfDevicePoints = bitUnitWriteData.NumberOfDevicePoints;
             byte[] commnad = _command.Reverse().ToArray();
             byte[] subCommand = _bitSubCommand.Reverse().ToArray();
-            byte[] binaryDevicePoints = BitHelper.ToBytesLittleEndian(bitUnitReadData.NumberOfDevicePoints);
+            byte[] binaryDevicePoints = BitHelper.ToBytesLittleEndian(bitUnitWriteData.NumberOfDevicePoints);
             byte[] binaryAddress = ConvertToBinaryAddress(deviceCode.DeviceNoRange, StartAddress);
+            byte[] binaryWriteData = new byte[] { };
 
-            SetBinaryCode(commnad, subCommand, binaryAddress, deviceCode.BinaryCode, binaryDevicePoints);
-            SetASCIICode(commnad, subCommand, binaryAddress, deviceCode.ASCIICode, binaryDevicePoints);
+            foreach (bool data in bitUnitWriteData.WriteDataList)
+            {
+                binaryWriteData = new byte[] { }
+                .Concat(binaryWriteData)
+                .Concat(BitHelper.ToBytesLittleEndian(data ? (ushort)1 : (ushort)0)).ToArray();
+            }
+            SetBinaryCode(commnad, subCommand, binaryAddress, deviceCode.BinaryCode, binaryDevicePoints, binaryWriteData);
+            SetASCIICode(commnad, subCommand, binaryAddress, deviceCode.ASCIICode, binaryDevicePoints, binaryWriteData);
         }
 
-        private void SetBinaryCode(byte[] command, byte[] subCommand, byte[] binaryAddress, byte[] devCode, byte[] binaryDevPoints)
+        private void SetBinaryCode(byte[] command, byte[] subCommand, byte[] binaryAddress, byte[] devCode, byte[] binaryDevPoints, byte[] binaryWriteData)
         {
             BinaryCode = new byte[] { }
                 .Concat(command)
@@ -62,21 +75,24 @@ namespace SLMPGenerator.Command.Mitsubishi
                 .Concat(binaryAddress)
                 .Concat(devCode)
                 .Concat(binaryDevPoints)
+                .Concat(binaryWriteData)
                 .ToArray();
         }
 
-        private void SetASCIICode(byte[] command, byte[] subCommand, byte[] binaryAddress, string devCode, byte[] binaryDevPoints)
+        private void SetASCIICode(byte[] command, byte[] subCommand, byte[] binaryAddress, string devCode, byte[] binaryDevPoints, byte[] binaryWriteData)
         {
             string asciiCommand = BitHelper.ToReverseString(command);
             string asciiSubCommand = BitHelper.ToReverseString(subCommand);
             string asciiAddress = BitHelper.ToReverseString(binaryAddress).PadLeft(_padding, '0');
             string asciiDevicePoints = BitHelper.ToReverseString(binaryDevPoints);
+            string asciiWriteData = BitHelper.ToReverseString(binaryWriteData);
 
             ASCIICode = asciiCommand
                     + asciiSubCommand
                     + devCode
                     + asciiAddress
-                    + asciiDevicePoints;
+                    + asciiDevicePoints
+                    + asciiWriteData;
         }
 
         private byte[] ConvertToBinaryAddress(DeviceNoRange deviceNoRange, int address)
@@ -97,7 +113,7 @@ namespace SLMPGenerator.Command.Mitsubishi
 
         public override bool Equals(object? obj)
         {
-            return obj is RSeriesReadRequestData other && ASCIICode.Equals(other.ASCIICode);
+            return obj is RSeriesWriteRequestData other && ASCIICode.Equals(other.ASCIICode);
         }
     }
 }

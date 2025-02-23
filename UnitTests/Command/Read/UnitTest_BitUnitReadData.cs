@@ -1,9 +1,10 @@
 ﻿using SLMPGenerator.Command;
+using SLMPGenerator.Command.Read;
 using Xunit;
 
-namespace SLMPGenerator.Tests.Command
+namespace UnitTests.Command.Read
 {
-    public class UnitTest_BitUnitAccessData
+    public class UnitTest_BitUnitReadData
     {
         /// <summary>
         /// コンストラクタに有効なパラメータを渡した場合、プロパティが正しく設定されることをテストします。
@@ -17,12 +18,12 @@ namespace SLMPGenerator.Tests.Command
             var deviceCode = new DeviceCode(new byte[] { 0x01 }, "01", DeviceType.Bit, DeviceNoRange.Dec);
 
             // Act
-            var bitUnitAccessData = new BitUnitAccessData(deviceCode, address, numberOfDevPoints);
+            var bitUnitReadData = new BitUnitReadData(deviceCode, address, numberOfDevPoints);
 
             // Assert
-            Assert.Equal(deviceCode, bitUnitAccessData.DeviceCode);
-            Assert.Equal(address, bitUnitAccessData.Address);
-            Assert.Equal(numberOfDevPoints, bitUnitAccessData.NumberOfDevicePoints);
+            Assert.Equal(deviceCode, bitUnitReadData.DeviceCode);
+            Assert.Equal(address, bitUnitReadData.StartAddress);
+            Assert.Equal(numberOfDevPoints, bitUnitReadData.NumberOfDevicePoints);
         }
 
         /// <summary>
@@ -37,19 +38,19 @@ namespace SLMPGenerator.Tests.Command
             ushort numberOfDevPoints = 10;
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => new BitUnitAccessData(deviceCode, address, numberOfDevPoints));
+            Assert.Throws<ArgumentNullException>(() => new BitUnitReadData(deviceCode, address, numberOfDevPoints));
         }
 
         /// <summary>
-        /// 同じプロパティ値を持つBitUnitAccessDataオブジェクトが等しいと判断されることをテストします。
+        /// 同じプロパティ値を持つBitUnitReadDataオブジェクトが等しいと判断されることをテストします。
         /// </summary>
         [Fact]
         public void Equals_SameProperties_ReturnsTrue()
         {
             // Arrange
             var deviceCode = new DeviceCode(new byte[] { 0x01 }, "01", DeviceType.Bit, DeviceNoRange.Dec);
-            var obj1 = new BitUnitAccessData(deviceCode, 0x1234, 10);
-            var obj2 = new BitUnitAccessData(deviceCode, 0x1234, 10);
+            var obj1 = new BitUnitReadData(deviceCode, 0x1234, 10);
+            var obj2 = new BitUnitReadData(deviceCode, 0x1234, 10);
 
             // Act
             bool result = obj1.Equals(obj2);
@@ -59,7 +60,7 @@ namespace SLMPGenerator.Tests.Command
         }
 
         /// <summary>
-        /// 異なるプロパティ値を持つBitUnitAccessDataオブジェクトが等しくないと判断されることをテストします。
+        /// 異なるプロパティ値を持つBitUnitReadDataオブジェクトが等しくないと判断されることをテストします。
         /// </summary>
         [Fact]
         public void Equals_DifferentProperties_ReturnsFalse()
@@ -67,8 +68,8 @@ namespace SLMPGenerator.Tests.Command
             // Arrange
             var deviceCode1 = new DeviceCode(new byte[] { 0x01 }, "01", DeviceType.Bit, DeviceNoRange.Dec);
             var deviceCode2 = new DeviceCode(new byte[] { 0x02 }, "02", DeviceType.Bit, DeviceNoRange.Dec);
-            var obj1 = new BitUnitAccessData(deviceCode1, 0x1234, 10);
-            var obj2 = new BitUnitAccessData(deviceCode2, 0x5678, 20);
+            var obj1 = new BitUnitReadData(deviceCode1, 0x1234, 10);
+            var obj2 = new BitUnitReadData(deviceCode2, 0x5678, 20);
 
             // Act
             bool result = obj1.Equals(obj2);
@@ -78,15 +79,15 @@ namespace SLMPGenerator.Tests.Command
         }
 
         /// <summary>
-        /// 同じプロパティ値を持つBitUnitAccessDataオブジェクトが同じハッシュコードを返すことをテストします。
+        /// 同じプロパティ値を持つBitUnitReadDataオブジェクトが同じハッシュコードを返すことをテストします。
         /// </summary>
         [Fact]
         public void GetHashCode_SameProperties_ReturnsSameHashCode()
         {
             // Arrange
             var deviceCode = new DeviceCode(new byte[] { 0x01 }, "01", DeviceType.Bit, DeviceNoRange.Dec);
-            var obj1 = new BitUnitAccessData(deviceCode, 0x1234, 10);
-            var obj2 = new BitUnitAccessData(deviceCode, 0x1234, 10);
+            var obj1 = new BitUnitReadData(deviceCode, 0x1234, 10);
+            var obj2 = new BitUnitReadData(deviceCode, 0x1234, 10);
 
             // Act
             int hashCode1 = obj1.GetHashCode();
@@ -97,7 +98,7 @@ namespace SLMPGenerator.Tests.Command
         }
 
         /// <summary>
-        /// 異なるプロパティ値を持つBitUnitAccessDataオブジェクトが異なるハッシュコードを返すことをテストします。
+        /// 異なるプロパティ値を持つBitUnitReadDataオブジェクトが異なるハッシュコードを返すことをテストします。
         /// </summary>
         [Fact]
         public void GetHashCode_DifferentProperties_ReturnsDifferentHashCode()
@@ -105,8 +106,8 @@ namespace SLMPGenerator.Tests.Command
             // Arrange
             var deviceCode1 = new DeviceCode(new byte[] { 0x01 }, "01", DeviceType.Bit, DeviceNoRange.Dec);
             var deviceCode2 = new DeviceCode(new byte[] { 0x02 }, "02", DeviceType.Bit, DeviceNoRange.Dec);
-            var obj1 = new BitUnitAccessData(deviceCode1, 0x1234, 10);
-            var obj2 = new BitUnitAccessData(deviceCode2, 0x5678, 20);
+            var obj1 = new BitUnitReadData(deviceCode1, 0x1234, 10);
+            var obj2 = new BitUnitReadData(deviceCode2, 0x5678, 20);
 
             // Act
             int hashCode1 = obj1.GetHashCode();

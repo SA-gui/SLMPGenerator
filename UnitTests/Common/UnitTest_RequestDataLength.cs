@@ -135,7 +135,7 @@ namespace SLMPGenerator.Tests.Common
         public byte[] BinaryCode { get; }
         public string ASCIICode { get; }
         public DeviceType DeviceType => DeviceType.Word;
-        public int Address => 0;
+        public int StartAddress => 0;
         public ushort NumberOfDevicePoints => 0;
     }
 }
