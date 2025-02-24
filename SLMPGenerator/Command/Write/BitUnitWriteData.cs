@@ -29,12 +29,12 @@ namespace SLMPGenerator.Command.Write
 
         public override int GetHashCode()
         {
-            int hashCode = DeviceCode.GetHashCode() ^ StartAddress.GetHashCode() ^ NumberOfDevicePoints.GetHashCode();
+            int hash = DeviceCode.GetHashCode() ^ StartAddress.GetHashCode() ^ NumberOfDevicePoints.GetHashCode();
             foreach (var data in WriteDataList)
             {
-                hashCode = hashCode ^ data.GetHashCode();
+                hash = hash * 31 + data.GetHashCode();
             }
-            return hashCode;
+            return hash;
         }
 
         public override bool Equals(object? obj)

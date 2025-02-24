@@ -10,8 +10,8 @@ namespace UnitTests.Command.Read
         /// コンストラクタに有効なパラメータを渡した場合、プロパティが正しく設定されることをテストします。
         /// </summary>
         [Theory]
-        [InlineData(0x1234, 10)]
-        [InlineData(0x5678, 20)]
+        [InlineData(1234, 10)]
+        [InlineData(5678, 20)]
         public void Constructor_ValidParameters_SetsProperties(ushort address, ushort numberOfDevPoints)
         {
             // Arrange
@@ -34,11 +34,24 @@ namespace UnitTests.Command.Read
         {
             // Arrange
             DeviceCode deviceCode = null;
-            ushort address = 0x1234;
+            ushort address = 1234;
             ushort numberOfDevPoints = 10;
 
             // Act & Assert
             Assert.Throws<ArgumentNullException>(() => new BitUnitReadData(deviceCode, address, numberOfDevPoints));
+        }
+
+        /// <summary>
+        /// コンストラクタに無効なnumberOfDevPointsを渡した場合、ArgumentOutOfRangeExceptionがスローされることをテストします。
+        /// </summary>
+        [Fact]
+        public void Constructor_InvalidNumberOfDevPoints_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            var deviceCode = new DeviceCode(new byte[] { 0x01 }, "01", DeviceType.Bit, DeviceNoRange.Dec);
+
+            // Act & Assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => new BitUnitReadData(deviceCode, 1234, 0));
         }
 
         /// <summary>
@@ -49,8 +62,8 @@ namespace UnitTests.Command.Read
         {
             // Arrange
             var deviceCode = new DeviceCode(new byte[] { 0x01 }, "01", DeviceType.Bit, DeviceNoRange.Dec);
-            var obj1 = new BitUnitReadData(deviceCode, 0x1234, 10);
-            var obj2 = new BitUnitReadData(deviceCode, 0x1234, 10);
+            var obj1 = new BitUnitReadData(deviceCode, 1234, 10);
+            var obj2 = new BitUnitReadData(deviceCode, 1234, 10);
 
             // Act
             bool result = obj1.Equals(obj2);
@@ -68,8 +81,8 @@ namespace UnitTests.Command.Read
             // Arrange
             var deviceCode1 = new DeviceCode(new byte[] { 0x01 }, "01", DeviceType.Bit, DeviceNoRange.Dec);
             var deviceCode2 = new DeviceCode(new byte[] { 0x02 }, "02", DeviceType.Bit, DeviceNoRange.Dec);
-            var obj1 = new BitUnitReadData(deviceCode1, 0x1234, 10);
-            var obj2 = new BitUnitReadData(deviceCode2, 0x5678, 20);
+            var obj1 = new BitUnitReadData(deviceCode1, 1234, 10);
+            var obj2 = new BitUnitReadData(deviceCode2, 5678, 20);
 
             // Act
             bool result = obj1.Equals(obj2);
@@ -86,8 +99,8 @@ namespace UnitTests.Command.Read
         {
             // Arrange
             var deviceCode = new DeviceCode(new byte[] { 0x01 }, "01", DeviceType.Bit, DeviceNoRange.Dec);
-            var obj1 = new BitUnitReadData(deviceCode, 0x1234, 10);
-            var obj2 = new BitUnitReadData(deviceCode, 0x1234, 10);
+            var obj1 = new BitUnitReadData(deviceCode, 1234, 10);
+            var obj2 = new BitUnitReadData(deviceCode, 1234, 10);
 
             // Act
             int hashCode1 = obj1.GetHashCode();
@@ -106,8 +119,8 @@ namespace UnitTests.Command.Read
             // Arrange
             var deviceCode1 = new DeviceCode(new byte[] { 0x01 }, "01", DeviceType.Bit, DeviceNoRange.Dec);
             var deviceCode2 = new DeviceCode(new byte[] { 0x02 }, "02", DeviceType.Bit, DeviceNoRange.Dec);
-            var obj1 = new BitUnitReadData(deviceCode1, 0x1234, 10);
-            var obj2 = new BitUnitReadData(deviceCode2, 0x5678, 20);
+            var obj1 = new BitUnitReadData(deviceCode1, 1234, 10);
+            var obj2 = new BitUnitReadData(deviceCode2, 5678, 20);
 
             // Act
             int hashCode1 = obj1.GetHashCode();

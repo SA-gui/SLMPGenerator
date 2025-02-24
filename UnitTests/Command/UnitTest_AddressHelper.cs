@@ -61,6 +61,7 @@ namespace SLMPGenerator.Tests.Command
         [InlineData(MessageType.ASCII, DeviceType.Bit, 3585)]
         [InlineData(MessageType.ASCII, DeviceType.Word, 961)]
         [InlineData(MessageType.ASCII, DeviceType.DoubleWord, 961)]
+        [InlineData((MessageType)9999, DeviceType.DoubleWord, 961)]
         internal void ValidateDevPoints_InvalidPoints_ThrowsArgumentOutOfRangeException(MessageType messageType, DeviceType deviceType, ushort points)
         {
             // Arrange & Act & Assert

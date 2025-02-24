@@ -105,5 +105,36 @@ namespace SLMPGenerator.Tests.Command.Write
             // Assert
             Assert.False(result);
         }
+
+
+        /// <summary>
+        /// GetHashCodeが同じハッシュコードを返すテストを行います。
+        /// </summary>
+        [Fact]
+        public void GetHashCode_SameObject_ShouldReturnSameHashCode()
+        {
+            // Arrange
+            var deviceCode = new DeviceCode(new byte[] { 0x00 }, "D", DeviceType.Word, DeviceNoRange.Dec);
+            var wordUnitWriteData1 = new WordUnitWriteData(deviceCode, 0, new List<short> { 1, 2, 3 });
+            var wordUnitWriteData2 = new WordUnitWriteData(deviceCode, 0, new List<short> { 1, 2, 3 });
+
+            // Act & Assert
+            Assert.Equal(wordUnitWriteData1.GetHashCode(), wordUnitWriteData2.GetHashCode());
+        }
+
+        /// <summary>
+        /// GetHashCodeが異なるハッシュコードを返すテストを行います。
+        /// </summary>
+        [Fact]
+        public void GetHashCode_DifferentObject_ShouldReturnDifferentHashCode()
+        {
+            // Arrange
+            var deviceCode = new DeviceCode(new byte[] { 0x00 }, "D", DeviceType.Word, DeviceNoRange.Dec);
+            var wordUnitWriteData1 = new WordUnitWriteData(deviceCode, 0, new List<short> { 1, 2, 3 });
+            var wordUnitWriteData2 = new WordUnitWriteData(deviceCode, 0, new List<short> { 3, 2, 1 });
+
+            // Act & Assert
+            Assert.NotEqual(wordUnitWriteData1.GetHashCode(), wordUnitWriteData2.GetHashCode());
+        }
     }
 }

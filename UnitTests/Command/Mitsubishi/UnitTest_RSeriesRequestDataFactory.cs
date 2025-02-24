@@ -52,12 +52,12 @@ namespace SLMPGenerator.Tests.Command.Mitsubishi
         /// 無効なデバイス名を渡した場合、ArgumentExceptionがスローされることをテストします。
         /// </summary>
         [Theory]
-        [InlineData(MessageType.Binary, "X100", 10)]
-        [InlineData(MessageType.ASCII, "Y200", 20)]
-        public void CreateReadRequestData_InvalidDeviceName_ThrowsArgumentException(MessageType messageType, string rawAddress, ushort points)
+        [InlineData(DeviceAccessType.Bit, MessageType.Binary, "XXX100", 10)]
+        [InlineData(DeviceAccessType.Word, MessageType.ASCII, "YYY200", 20)]
+        public void CreateReadRequestData_InvalidDeviceName_ThrowsArgumentException(DeviceAccessType devReadType, MessageType messageType, string rawAddress, ushort points)
         {
             // Arrange & Act & Assert
-            Assert.Throws<ArgumentException>(() => RSeriesRequestDataFactory.CreateReadRequestData(DeviceAccessType.Word, messageType, rawAddress, points));
+            Assert.Throws<ArgumentException>(() => RSeriesRequestDataFactory.CreateReadRequestData(devReadType, messageType, rawAddress, points));
         }
 
 
@@ -91,8 +91,17 @@ namespace SLMPGenerator.Tests.Command.Mitsubishi
             Assert.IsType<RSeriesWriteRequestData>(result);
         }
 
-        
 
+        /// <summary>
+        /// 無効なデバイス名を渡した場合、ArgumentExceptionがスローされることをテストします。
+        /// </summary>
+        [Fact]
+        public void CreateWriteRequestData_InvalidDeviceAccessType_ThrowsArgumentException()
+        {
+            // Arrange & Act & Assert
+            Assert.Throws<ArgumentException>(() => RSeriesRequestDataFactory.CreateWriteRequestData(MessageType.Binary, "XXX100", new List<short> { 1, 2, 3 }));
+            Assert.Throws<ArgumentException>(() => RSeriesRequestDataFactory.CreateWriteRequestData(MessageType.Binary, "XXX100", new List<bool> { true, false, true }));
+        }
 
 
 

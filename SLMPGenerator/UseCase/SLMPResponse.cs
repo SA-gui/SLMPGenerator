@@ -67,6 +67,7 @@ namespace SLMPGenerator.UseCase
             {
                 throw new SLMPUnitErrorException($"ErrorCode:{resultCode} Consult your unit's manual for details.");
             }
+            // ToDO: ここで応答データ長を取得する処理を追加する
             int responseDataStartIndex = 22;
             int responseDataLength = responseDataUnitLength * numberOfDevicePoints;
 

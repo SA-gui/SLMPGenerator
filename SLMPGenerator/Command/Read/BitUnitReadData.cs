@@ -16,6 +16,11 @@ namespace SLMPGenerator.Command.Read
 
         public BitUnitReadData(DeviceCode deviceCode, ushort startAddress, ushort numberOfDevPoints)
         {
+            if (numberOfDevPoints <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(numberOfDevPoints), "Number of device points must be greater than zero.");
+            }
+
             DeviceCode = deviceCode ?? throw new ArgumentNullException(nameof(deviceCode));
             StartAddress = startAddress;
             NumberOfDevicePoints = numberOfDevPoints;

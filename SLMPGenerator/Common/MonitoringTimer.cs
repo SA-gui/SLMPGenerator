@@ -9,7 +9,7 @@ namespace SLMPGenerator.Common
         const double TIMER_UNIT_VALUE = 0.25;
 
         // ローカルステーションタイマMIN MAX
-        const double OWN_ST_MIN_TIMER_VALUE = 0.2;
+        const double OWN_ST_MIN_TIMER_VALUE = 0.25;
         const double OWN_ST_MAX_TIMER_VALUE = 10.0;
 
         const double OTHER_ST_MIN_TIMER_VALUE = 0.5;

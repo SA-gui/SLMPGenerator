@@ -28,7 +28,7 @@ namespace SLMPGenerator.Command.Mitsubishi
                 case DeviceAccessType.Word:
                     return CreateWordUnitReadRequestData(messageType, rawAddress, points);
                 default:
-                    throw new ArgumentException("Invalid command");
+                    throw new ArgumentException("Invalid DeviceAccessType");
             }
         }
 

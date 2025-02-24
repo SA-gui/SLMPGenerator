@@ -11,9 +11,9 @@ namespace SLMPGenerator.Command
     {
         private const string REGEX = @"^(?<device>[A-Za-z]+)(?<address>\d+)$";
 
-        internal static (string,ushort) SplitAddress(string rawAdress)
+        internal static (string,ushort) SplitAddress(string rawAddress)
         {
-            var match = System.Text.RegularExpressions.Regex.Match(rawAdress, REGEX);
+            var match = System.Text.RegularExpressions.Regex.Match(rawAddress, REGEX);
             if (!match.Success)
             {
                 throw new ArgumentException("Invalid address format");

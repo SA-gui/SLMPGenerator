@@ -174,8 +174,37 @@ namespace SLMPGenerator.Tests.UseCase
             // Assert
             Assert.NotEqual(hashCode1, hashCode2);
         }
+
+        /// <summary>
+        /// 無効なMessageTypeを渡した場合、NotSupportedExceptionがスローされることをテストします。
+        /// </summary>
+        [Fact]
+        public void Resolve_InvalidMessageType_ThrowsNotSupportedException()
+        {
+            // Arrange
+            var slmpResponse = new SLMPResponse((MessageType)999, DeviceAccessType.Word);
+            var response = new byte[] { 0x00, 0x00, 0x00, 0x00 };
+
+            // Act & Assert
+            Assert.Throws<NotSupportedException>(() => slmpResponse.Resolve(response, 1));
+        }
+
+        /// <summary>
+        /// 無効なDeviceAccessTypeを渡した場合、NotSupportedExceptionがスローされることをテストします。
+        /// </summary>
+        [Fact]
+        public void Resolve_InvalidDeviceAccessType_ThrowsNotSupportedException()
+        {
+            // Arrange
+            var slmpResponse = new SLMPResponse(MessageType.Binary, (DeviceAccessType)999);
+            var response = new byte[] { 0x00, 0x00, 0x00, 0x00 };
+
+            // Act & Assert
+            Assert.Throws<NotSupportedException>(() => slmpResponse.Resolve(response, 1));
+        }
     }
 }
+
 
 
 

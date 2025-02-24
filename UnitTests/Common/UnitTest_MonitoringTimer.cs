@@ -39,6 +39,7 @@ namespace SLMPGenerator.Tests.Common
         /// 無効なタイマー値を渡した場合、ArgumentExceptionがスローされることをテストします。
         /// </summary>
         [Theory]
+        [InlineData(RequestDestModuleIOType.OwnStationCPU, 0)]
         [InlineData(RequestDestModuleIOType.OwnStationCPU, 0.3)]
         [InlineData(RequestDestModuleIOType.OwnStationCPU, -0.1)]
         public void Constructor_InvalidTimerValue_ThrowsArgumentException(RequestDestModuleIOType destinationIOType, double invalidTimerSec)
@@ -51,10 +52,9 @@ namespace SLMPGenerator.Tests.Common
         /// 範囲外のタイマー値を渡した場合、ArgumentExceptionがスローされることをテストします。
         /// </summary>
         [Theory]
-        [InlineData(RequestDestModuleIOType.OwnStationCPU, 0.1)]
-        [InlineData(RequestDestModuleIOType.OwnStationCPU, 10.1)]
-        [InlineData(RequestDestModuleIOType.MultidropConnectionCPU, 0.4)]
-        [InlineData(RequestDestModuleIOType.MultidropConnectionCPU, 60.1)]
+        [InlineData(RequestDestModuleIOType.OwnStationCPU, 10.25)]
+        [InlineData(RequestDestModuleIOType.MultidropConnectionCPU, 0.25)]
+        [InlineData(RequestDestModuleIOType.MultidropConnectionCPU, 60.25)]
         public void Constructor_TimerValueOutOfRange_ThrowsArgumentException(RequestDestModuleIOType destinationIOType, double outOfRangeTimerSec)
         {
             // Arrange & Act & Assert
