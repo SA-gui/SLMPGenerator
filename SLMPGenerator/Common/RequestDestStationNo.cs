@@ -14,12 +14,14 @@ namespace SLMPGenerator.Common
         private const ushort VALUE2 = 126;
         private const ushort VALUE3 = 255;
 
+        internal ushort Value { get; private set; }
         internal byte[] BinaryCode { get; private set; }
         internal string ASCIICode { get; private set; }
 
         internal RequestDestStationNo(ushort stationNo)
         {
             Validate(stationNo);
+            Value = stationNo;
             BinaryCode = BitConverter.GetBytes(stationNo).Take(1).ToArray();
             ASCIICode = BitHelper.ToString(BinaryCode);
         }

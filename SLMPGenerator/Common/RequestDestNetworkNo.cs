@@ -10,12 +10,14 @@ namespace SLMPGenerator.Common
     {
         private const ushort MIN_VALUE = 0;
         private const ushort MAX_VALUE = 239;
+        internal ushort Value { get; private set; }
         internal byte[] BinaryCode { get; private set; }
         internal string ASCIICode { get; private set; }
 
         internal RequestDestNetworkNo(ushort networkNo)
         {
             Validate(networkNo);
+            Value = networkNo;
             BinaryCode = BitHelper.ToBytesLittleEndian(networkNo).Take(1).ToArray();
             ASCIICode = BitHelper.ToString(BinaryCode);
         }
